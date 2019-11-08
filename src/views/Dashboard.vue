@@ -3,25 +3,31 @@
     <v-app-bar color="orange">
       <v-toolbar-title>Overwatch Stats</v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-icon @click="$router.push('/')" color="white">cancel</v-icon>
+      <v-btn color="secondary" @click="$router.push('/')"
+        >Logout
+        <v-icon right color="white">backspace</v-icon>
+      </v-btn>
     </v-app-bar>
-    <v-container class="fill-height" fluid>
+    <v-container>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card raised
             ><v-card-title>Player Search</v-card-title>
-            <div v-if="this.playerDetails.length < 1">
+            <div v-if="!this.playerDetails">
               <v-card-text
                 ><v-form id="playerSearch" @submit.prevent="getPlayer">
                   <v-text-field
                     color="orange"
-                    label="Player Name *case sensitive*"
+                    label="Player Name"
+                    hint="*Case Sensitive*"
                     name="player"
                     type="text"/>
                   <v-select
-                    color="orange"
+                    append-icon="arrow_drop_down"
+                    dense
                     label="Player Region"
                     name="playerRegion"
+                    color="orange"
                     :items="regions"/>
                   <v-text-field
                     color="orange"
@@ -45,14 +51,18 @@
         </v-col>
       </v-row>
     </v-container>
-    <v-container class="fill-height" fluid>
+    <v-container v-if="this.playerDetails" class="fill-height" fluid>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card class="mx-auto" max-width="400">
-            <v-img :src="playerDetails.icon">
-              <v-card-title>{{ playerDetails.Name }}</v-card-title>
-            </v-img>
-            <v-card-subtitle>Subtitle</v-card-subtitle>
+            <v-img :src="this.playerDetails.icon" />
+            <v-card-title>{{ playerDetails.name }}</v-card-title>
+            <div id="playerFrame">
+              <v-img :src="this.playerDetails.prestigeIcon" />
+              <v-img :src="this.playerDetails.levelIcon" />
+              <v-img position="bottom" :src="this.playerDetails.ratingIcon" />
+            </div>
+            <p>{{ this.playerDetails.rating }}</p>
           </v-card>
         </v-col>
       </v-row>
@@ -69,7 +79,7 @@ export default {
     return {
       loading: false,
       regions: ["EU", "US", "Asia"],
-      playerDetails: [],
+      playerDetails: null,
     };
   },
   methods: {
@@ -94,4 +104,7 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+#playerFrame {
+}
+</style>
