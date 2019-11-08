@@ -3,7 +3,7 @@
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
-          <v-card class="elevation-12">
+          <v-card raised>
             <v-toolbar color="primary" dark flat>
               <v-toolbar-title>Login</v-toolbar-title>
               <v-spacer />
@@ -32,7 +32,11 @@
                 >Sign Up</v-btn
               >
               <v-spacer />
-              <v-btn form="loginForm" type="submit" color="primary"
+              <v-btn
+                :loading="this.loading"
+                form="loginForm"
+                type="submit"
+                color="primary"
                 >Login</v-btn
               >
             </v-card-actions>
@@ -50,17 +54,17 @@ export default {
   name: "SignIn",
   data() {
     return {
-      signedInUser: null,
+      loading: false,
     };
   },
   methods: {
     signIn: async function(e) {
+      this.loading = true;
       const email = e.target[0].value;
       const password = e.target[1].value;
 
       try {
         const userData = await firebaseSignIn(email, password);
-        this.signedInUser = userData;
         this.$router.push("dashboard");
       } catch (err) {
         console.log(err);
