@@ -4,13 +4,14 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card raised>
-            <v-toolbar color="primary" dark flat>
+            <v-toolbar color="orange" flat>
               <v-toolbar-title>Login</v-toolbar-title>
               <v-spacer />
             </v-toolbar>
             <v-card-text>
               <v-form id="loginForm" @submit.prevent="signIn">
                 <v-text-field
+                  color="orange"
                   label="Email Address"
                   name="email"
                   append-icon="person"
@@ -18,6 +19,7 @@
                   autocomplete="current-email"
                 />
                 <v-text-field
+                  color="orange"
                   id="password"
                   label="Password"
                   name="password"
@@ -36,7 +38,7 @@
                 :loading="this.loading"
                 form="loginForm"
                 type="submit"
-                color="primary"
+                color="orange"
                 >Login</v-btn
               >
             </v-card-actions>

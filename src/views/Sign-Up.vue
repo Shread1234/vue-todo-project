@@ -4,13 +4,14 @@
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card raised>
-            <v-toolbar color="primary" dark flat>
+            <v-toolbar color="orange" flat>
               <v-toolbar-title>Create Account</v-toolbar-title>
               <v-spacer />
             </v-toolbar>
             <v-card-text>
               <v-form id="signUpForm" @submit.prevent="signUp">
                 <v-text-field
+                  color="orange"
                   id="email"
                   label="Email Address"
                   name="email"
@@ -18,6 +19,7 @@
                   type="email"
                 />
                 <v-text-field
+                  color="orange"
                   id="confirmEmail"
                   label="Confirm Email Address"
                   name="confirmEmail"
@@ -25,6 +27,7 @@
                   type="email"
                 />
                 <v-text-field
+                  color="orange"
                   id="password"
                   label="Password"
                   name="password"
@@ -32,6 +35,7 @@
                   type="password"
                 />
                 <v-text-field
+                  color="orange"
                   id="confirmPassword"
                   label="Confirm Password"
                   name="confirmPassword"
@@ -48,7 +52,7 @@
               <v-btn
                 type="submit"
                 form="signUpForm"
-                color="primary"
+                color="orange"
                 :loading="loading"
                 >Sign Up</v-btn
               >
