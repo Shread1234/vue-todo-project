@@ -1,6 +1,6 @@
 <template>
   <v-content>
-    <v-container class="fill-height" fluid>
+    <v-container fluid>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="4">
           <v-card raised>
@@ -15,7 +15,7 @@
                   id="email"
                   label="Email Address"
                   name="email"
-                  append-icon="mail_outline"
+                  append-icon="mail"
                   type="email"
                 />
                 <v-text-field
@@ -23,7 +23,6 @@
                   id="confirmEmail"
                   label="Confirm Email Address"
                   name="confirmEmail"
-                  append-icon="email"
                   type="email"
                 />
                 <v-text-field
@@ -31,7 +30,7 @@
                   id="password"
                   label="Password"
                   name="password"
-                  append-icon="lock_outline"
+                  append-icon="lock"
                   type="password"
                 />
                 <v-text-field
@@ -39,7 +38,6 @@
                   id="confirmPassword"
                   label="Confirm Password"
                   name="confirmPassword"
-                  append-icon="lock"
                   type="password"
                 />
               </v-form>
@@ -54,6 +52,7 @@
                 form="signUpForm"
                 color="orange"
                 :loading="loading"
+                :disabled="this.formIncomplete"
                 >Sign Up</v-btn
               >
             </v-card-actions>
@@ -72,6 +71,11 @@ export default {
   data() {
     return {
       loading: false,
+      emailAddressValue: "",
+      confirmedEmailAddressValue: "",
+      passwordValue: "",
+      confirmedPasswordValue: "",
+      formIncomplete: true,
     };
   },
   methods: {
@@ -85,6 +89,44 @@ export default {
       } catch (err) {
         console.log(err);
       }
+    },
+    formValidation: function() {
+      if (
+        this.emailAddressValue.length > 0 &&
+        this.passwordValue.length > 0 &&
+        this.validateStringMatch(
+          this.emailAddressValue,
+          this.confirmedEmailAddressValue,
+        ) &&
+        this.validateStringMatch(
+          this.passwordValue,
+          this.confirmedPasswordValue,
+        )
+      ) {
+        this.formIncomplete = false;
+      } else {
+        this.formIncomplete = true;
+        this.loading = false;
+      }
+    },
+    validateStringMatch: function(string, matcher) {
+      return string === matcher;
+    },
+    setEmailInput: function(e) {
+      this.emailAddressValue = e;
+      this.formValidation();
+    },
+    setPasswordInput: function(e) {
+      this.passwordValue = e;
+      this.formValidation();
+    },
+    setConfirmedEmailInput: function(e) {
+      this.confirmedEmailAddressValue = e;
+      this.formValidation();
+    },
+    setConfirmedPasswordInput: function(e) {
+      this.confirmedPasswordValue = e;
+      this.formValidation();
     },
   },
 };

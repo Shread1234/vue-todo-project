@@ -1,7 +1,7 @@
 <template>
   <v-content>
-    <v-container class="fill-height" fluid>
-      <v-row align="center" justify="center">
+    <v-container fluid>
+      <v-row align="center" justify="center" fill-width>
         <v-col cols="12" sm="8" md="4">
           <v-card raised>
             <v-toolbar color="orange" flat>
@@ -17,6 +17,8 @@
                   append-icon="person"
                   type="email"
                   autocomplete="current-email"
+                  @input="setEmailInput"
+                  :error-messages="this.emailErrorMessage"
                 />
                 <v-text-field
                   color="orange"
@@ -26,6 +28,8 @@
                   append-icon="lock"
                   type="password"
                   autocomplete="current-password"
+                  @input="setPasswordInput"
+                  :error-messages="this.passwordErrorMessage"
                 />
               </v-form>
             </v-card-text>
@@ -39,6 +43,7 @@
                 form="loginForm"
                 type="submit"
                 color="orange"
+                :disabled="this.formIncomplete"
                 >Login</v-btn
               >
             </v-card-actions>
@@ -57,6 +62,11 @@ export default {
   data() {
     return {
       loading: false,
+      formIncomplete: true,
+      emailAddressValue: "",
+      passwordValue: "",
+      emailErrorMessage: null,
+      passwordErrorMessage: null,
     };
   },
   methods: {
@@ -66,11 +76,45 @@ export default {
       const password = e.target[1].value;
 
       try {
+        this.emailErrorMessage = null;
+        this.passwordErrorMessage = null;
         const userData = await firebaseSignIn(email, password);
         this.$router.push("dashboard");
-      } catch (err) {
-        console.log(err);
+      } catch ({ message }) {
+        if (/password/.test(message)) {
+          this.passwordErrorMessage = "Incorrect Password";
+          this.passwordValue = "";
+          this.formValidation();
+        }
+
+        if (/email/.test(message)) {
+          this.emailErrorMessage = "Incorrect Email Format";
+          this.emailAddressValue = "";
+          this.formValidation();
+        }
+
+        if (/identifier/.test(message)) {
+          this.emailErrorMessage = "Unknown Email Address";
+          this.emailAddressValue = "";
+          this.formValidation();
+        }
       }
+    },
+    formValidation: function() {
+      if (this.emailAddressValue.length > 0 && this.passwordValue.length > 0) {
+        this.formIncomplete = false;
+      } else {
+        this.formIncomplete = true;
+        this.loading = false;
+      }
+    },
+    setEmailInput: function(e) {
+      this.emailAddressValue = e;
+      this.formValidation();
+    },
+    setPasswordInput: function(e) {
+      this.passwordValue = e;
+      this.formValidation();
     },
   },
 };

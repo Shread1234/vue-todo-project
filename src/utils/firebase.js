@@ -19,7 +19,7 @@ export const firebaseSignIn = async (email, password) => {
       .signInWithEmailAndPassword(email, password);
     return userSignIn;
   } catch (err) {
-    return err;
+    throw new Error(err.message);
   }
 };
 
